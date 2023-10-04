@@ -1,0 +1,21 @@
+{
+  "name": "objects",
+  "version": "0.0.1",
+  "description": "",
+  "main": "bootstrap.js",
+  "bin": "./bootstrap.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "release-it"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "graphql-js-tree": "^1.0.6"
+  },
+  "devDependencies": {
+    "release-it": "^16.2.1"
+  }
+}
