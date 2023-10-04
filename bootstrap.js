@@ -1,13 +1,12 @@
 import { Parser, TreeToGraphQL } from 'graphql-js-tree';
 import * as fs from 'fs';
-import program from 'commander';
-import {join} from 'path';
+import { program } from 'commander';
+import {join, dirname} from 'path';
 
 program
-  .option('-i, --inputFile')
-  .option('-o, --outputDir');
-
-program.parse();
+  .requiredOption('-i, --inputFile <graphqlFile>')
+  .option('-o, --outputDir [outputDir]', './')
+  .parse();
 
 const options = program.opts();
 
@@ -18,7 +17,7 @@ const parsedSchema = Parser.parse(schemaFileContents);
 for (const i of parsedSchema.nodes){
     if(i.type.fieldType.name === 'type'){
         let queryString = 'PREFIX : <https://github.com/dbcls/grasp/ns/>\n\n'
-        queryString += '# ${i.name}'
+        queryString += '# ${i.name}\n'
         queryString += 'CONSTRUCT {\n'
         
         for (const arg of i.args){
@@ -28,10 +27,11 @@ for (const i of parsedSchema.nodes){
         for (const arg of i.args){
             queryString += `  BIND(?${arg.name}_res AS ?${arg.name})\n`
         }
-        queryString += '{{#if iri}}'
-        queryString += 'VALUES ?iri { {{join " " (as-iriref iri)}} }'
-        queryString += '{{/if}}'
+        queryString += '  {{#if iri}}\n'
+        queryString += '  VALUES ?iri { {{join " " (as-iriref iri)}} }\n'
+        queryString += '  {{/if}}\n'
         queryString += '}'
+        fs.mkdirSync(options.outputDir, {recursive: true})
         fs.writeFileSync(join(options.outputDir, `${i.name}.sparql`), queryString);   
     }
 }
