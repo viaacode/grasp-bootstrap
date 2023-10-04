@@ -1,6 +1,6 @@
 {
   "name": "grasp-bootstrap",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Utility tool to boostrap a Grasp config directory from a graphql scheme.",
   "main": "bootstrap.js",
   "bin": "./bootstrap.js",
